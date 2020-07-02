@@ -13,67 +13,70 @@ use app\assets\AppAsset;
 AppAsset::register($this);
 ?>
 <?php $this->beginPage() ?>
-<!DOCTYPE html>
+
+<!doctype html>
 <html lang="<?= Yii::$app->language ?>">
 <head>
-    <meta charset="<?= Yii::$app->charset ?>">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <?php $this->registerCsrfMetaTags() ?>
-    <title><?= Html::encode($this->title) ?></title>
-    <?php $this->head() ?>
+  <meta charset="<?= Yii::$app->charset ?>">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <?php $this->registerCsrfMetaTags() ?>
+  <title><?= Html::encode($this->title) ?></title>
+  <?php $this->head() ?>
 </head>
 <body>
 <?php $this->beginBody() ?>
 
-<div class="wrap">
-    <?php
-    NavBar::begin([
-        'brandLabel' => Yii::$app->name,
-        'brandUrl' => Yii::$app->homeUrl,
-        'options' => [
-            'class' => 'navbar-inverse navbar-fixed-top',
-        ],
-    ]);
-    echo Nav::widget([
-        'options' => ['class' => 'navbar-nav navbar-right'],
-        'items' => [
-            ['label' => 'Home', 'url' => ['/site/index']],
-            ['label' => 'About', 'url' => ['/site/about']],
-            ['label' => 'Contact', 'url' => ['/site/contact']],
-            Yii::$app->user->isGuest ? (
-                ['label' => 'Login', 'url' => ['/site/login']]
-            ) : (
-                '<li>'
-                . Html::beginForm(['/site/logout'], 'post')
-                . Html::submitButton(
-                    'Logout (' . Yii::$app->user->identity->username . ')',
-                    ['class' => 'btn btn-link logout']
-                )
-                . Html::endForm()
-                . '</li>'
-            )
-        ],
-    ]);
-    NavBar::end();
-    ?>
+<div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom">
+    <h5 class="my-0 mr-md-auto font-weight-normal profy">
+    	<a href="/">Profy</a>
+    </h5>
+	<?php
+		if(Yii::$app->user->isGuest) {
+			echo Nav::widget([
+				'items' => [
+					['label' => 'Registration', 'url' => ['/site/register']],
+					['label' => 'Login', 'url' => ['/site/login']],
+				]
+			]);
+		} else {
+			if(Yii::$app->getUser()->identity->role == 1) {
+				// Customer
+				echo Nav::widget([
+					'items' => [
+						['label' => 'Order', 'url' => ['/site/order']],
+					]
+				]);
+			} else {
+				// Tasker
+				echo Nav::widget([
+					'items' => [
+						['label' => 'Total Earnings', 'url' => ['/site/earnings']],
+						['label' => 'My Services', 'url' => ['/site/services']],
+						['label' => 'Active Orders', 'url' => ['/site/active']],
+						['label' => 'Orders History', 'url' => ['/site/history']],
+					]
+				]);
+			}
 
-    <div class="container">
-        <?= Breadcrumbs::widget([
-            'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
-        ]) ?>
-        <?= Alert::widget() ?>
-        <?= $content ?>
-    </div>
+			echo Nav::widget([
+				'items' => [
+				['label' => 'Profile', 'url' => ['/site/profile']],
+				'<li>'
+		            . Html::beginForm(['/site/logout'], 'post')
+		            . Html::submitButton(
+		                'Logout',
+		                ['class' => 'btn btn-outline-danger']
+		            )
+		            . Html::endForm()
+	            . '</li>'
+				]
+			]);
+		}
+	?>
 </div>
 
-<footer class="footer">
-    <div class="container">
-        <p class="pull-left">&copy; My Company <?= date('Y') ?></p>
-
-        <p class="pull-right"><?= Yii::powered() ?></p>
-    </div>
-</footer>
+<?= $content ?>
 
 <?php $this->endBody() ?>
 </body>

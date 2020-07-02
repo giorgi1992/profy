@@ -17,6 +17,7 @@ class m200630_183359_create_orders_table extends Migration
             'user_id' => $this->integer()->notNull(),
             'tasker_id' => $this->integer()->notNull(),
             'status' => $this->integer()->notNull(),
+            'service_type' => $this->integer()->notNull(),
             'date' => $this->date()->notNull(),
             'time' => $this->time()->notNull(),
             'created_at' => $this->dateTime()->notNull(),

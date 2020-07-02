@@ -15,12 +15,13 @@ $config = [
         'request' => [
             // !!! insert a secret key in the following (if it is empty) - this is required by cookie validation
             'cookieValidationKey' => 'A_F6tqQfxZ-_x6J7HtVFSZhFPM5DdgIj',
+            'baseUrl' => ''
         ],
         'cache' => [
             'class' => 'yii\caching\FileCache',
         ],
         'user' => [
-            'identityClass' => 'app\models\User',
+            'identityClass' => 'app\models\Users',
             'enableAutoLogin' => true,
         ],
         'errorHandler' => [
@@ -43,14 +44,17 @@ $config = [
             ],
         ],
         'db' => $db,
-        /*
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
             'rules' => [
+                'register' => 'site/register',
+                'login' => 'site/login',
+                'logout' => 'site/logout',
+                'profile' => 'site/profile'
             ],
         ],
-        */
+        
     ],
     'params' => $params,
 ];

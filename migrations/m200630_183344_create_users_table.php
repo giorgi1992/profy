@@ -16,14 +16,14 @@ class m200630_183344_create_users_table extends Migration
             'id' => $this->primaryKey(),
             'login' => $this->string(20)->notNull()->unique(),
             'password' => $this->string(100)->notNull(),
-            'role' => $this->integer()->notNull(),
+            'role' => $this->integer(1)->notNull(),
+            'service_type' => $this->integer(1),
             'first_name' => $this->string(50)->notNull(),
             'last_name' => $this->string(50)->notNull(),
-            'gender' => $this->integer()->notNull(),
+            'gender' => $this->integer(1)->notNull(),
             'birth_date' => $this->date()->notNull(),
             'phone' => $this->string(15)->notNull(),
             'email' => $this->string(50)->notNull(),
-            'avatar' => $this->string(100)->notNull(),
             'referral_code' => $this->string(100)->notNull(),
             'created_at' => $this->dateTime()->notNull()
         ]);

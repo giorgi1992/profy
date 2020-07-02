@@ -7,8 +7,9 @@ use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\Response;
 use yii\filters\VerbFilter;
-use app\models\LoginForm;
-use app\models\ContactForm;
+use app\models\Register;
+use app\models\Login;
+use app\models\Order;
 
 class SiteController extends Controller
 {
@@ -71,19 +72,20 @@ class SiteController extends Controller
      */
     public function actionLogin()
     {
-        if (!Yii::$app->user->isGuest) {
-            return $this->goHome();
+        $model = new Login;
+
+        if(Yii::$app->request->post('Login'))
+        {
+            $model->attributes = Yii::$app->request->post('Login');
+
+            if($model->validate())
+            {
+                Yii::$app->user->login($model->getUser());
+                return $this->redirect('profile');
+            }
         }
 
-        $model = new LoginForm();
-        if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            return $this->goBack();
-        }
-
-        $model->password = '';
-        return $this->render('login', [
-            'model' => $model,
-        ]);
+        return $this->render('login', ['model' => $model]);
     }
 
     /**
@@ -99,30 +101,96 @@ class SiteController extends Controller
     }
 
     /**
-     * Displays contact page.
+     * Displays register page.
      *
      * @return Response|string
      */
-    public function actionContact()
+    public function actionRegister()
     {
-        $model = new ContactForm();
-        if ($model->load(Yii::$app->request->post()) && $model->contact(Yii::$app->params['adminEmail'])) {
-            Yii::$app->session->setFlash('contactFormSubmitted');
+        $model = new Register;
 
-            return $this->refresh();
+        if(Yii::$app->request->post('Register'))
+        {
+            $model->attributes = Yii::$app->request->post('Register');
+
+            if($model->validate() && $model->register())
+            {
+                return $this->redirect('login');
+            }
         }
-        return $this->render('contact', [
-            'model' => $model,
-        ]);
+
+        return $this->render('register', ['model' => $model]);
     }
 
     /**
-     * Displays about page.
+     * Displays profile page.
      *
-     * @return string
+     * @return Response|string
      */
-    public function actionAbout()
+    public function actionProfile()
     {
-        return $this->render('about');
+        return $this->render('profile');
+    }
+
+    /**
+     * Displays order page.
+     *
+     * @return Response|string
+     */
+    public function actionOrder()
+    {
+        $model = new Order;
+
+        if(Yii::$app->request->post('Order'))
+        {
+            $model->attributes = Yii::$app->request->post('Order');
+
+            if($model->validate() && $model->order())
+            {
+                return $this->redirect('home');
+            }
+        }
+
+        return $this->render('order', ['model' => $model]);
+    }
+
+    /**
+     * Displays earnings page.
+     *
+     * @return Response|string
+     */
+    public function actionEarnings()
+    {
+        return $this->render('earnings');
+    }
+
+    /**
+     * Displays services page.
+     *
+     * @return Response|string
+     */
+    public function actionServices()
+    {
+        return $this->render('services');
+    }
+
+    /**
+     * Displays order-history page.
+     *
+     * @return Response|string
+     */
+    public function actionHistory()
+    {
+        return $this->render('orders-history');
+    }
+
+    /**
+     * Displays active-orders page.
+     *
+     * @return Response|string
+     */
+    public function actionActive()
+    {
+        return $this->render('active-orders');
     }
 }

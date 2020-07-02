@@ -18,6 +18,11 @@ class m200630_183419_create_service_table extends Migration
             'type' => $this->integer()->notNull(),
             'price' => $this->float()->notNull()
         ]);
+
+        $this->insert('{{%service}}', ['name' => 'Cooking', 'type' => 1, 'price' => 10]);
+        $this->insert('{{%service}}', ['name' => 'Lighting', 'type' => 2, 'price' => 15]);
+        $this->insert('{{%service}}', ['name' => 'TV', 'type' => 3, 'price' => 22]);
+        $this->insert('{{%service}}', ['name' => 'Wiring', 'type' => 4, 'price' => 30]);
     }
 
     /**
